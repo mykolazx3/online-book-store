@@ -1,10 +1,14 @@
 package com.mykola.onlinebookstore.service;
 
+import com.mykola.onlinebookstore.dto.BookDto;
+import com.mykola.onlinebookstore.dto.CreateBookRequestDto;
 import com.mykola.onlinebookstore.model.Book;
 import java.util.List;
 
 public interface BookService {
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List<Book> findAll();
+    List<BookDto> findAll();
+
+    BookDto findBookById(Long id);
 }
