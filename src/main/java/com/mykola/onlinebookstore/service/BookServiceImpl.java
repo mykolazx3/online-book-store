@@ -1,27 +1,26 @@
 package com.mykola.onlinebookstore.service;
 
 import com.mykola.onlinebookstore.dto.BookDto;
+import com.mykola.onlinebookstore.dto.BookSearchParameters;
 import com.mykola.onlinebookstore.dto.CreateBookRequestDto;
 import com.mykola.onlinebookstore.exception.EntityNotFoundException;
 import com.mykola.onlinebookstore.mapper.BookMapper;
 import com.mykola.onlinebookstore.model.Book;
-import com.mykola.onlinebookstore.repository.BookRepository;
+import com.mykola.onlinebookstore.repository.book.BookRepository;
+import com.mykola.onlinebookstore.repository.book.BookSpecificationBuilder;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
 
-    private BookRepository bookRepository;
-    private BookMapper bookMapper;
-
-    @Autowired
-    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper) {
-        this.bookRepository = bookRepository;
-        this.bookMapper = bookMapper;
-    }
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+    private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -56,5 +55,12 @@ public class BookServiceImpl implements BookService {
             return book;
         }).orElseThrow(() -> new EntityNotFoundException("Can't update book with id " + id));
         return bookMapper.toDto(bookRepository.save(updatedBook));
+    }
+
+    public List<BookDto> search(BookSearchParameters searchParameters) {
+        Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
+        return bookRepository.findAll(bookSpecification).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }

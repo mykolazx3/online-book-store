@@ -1,6 +1,7 @@
 package com.mykola.onlinebookstore.controller;
 
 import com.mykola.onlinebookstore.dto.BookDto;
+import com.mykola.onlinebookstore.dto.BookSearchParameters;
 import com.mykola.onlinebookstore.dto.CreateBookRequestDto;
 import com.mykola.onlinebookstore.service.BookService;
 import java.util.List;
@@ -46,6 +47,11 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
     }
 
 }
