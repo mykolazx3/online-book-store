@@ -53,7 +53,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(SpecificationNotFoundException.class)
-    public ResponseEntity<Object> handleSpecificationNotFoundException(SpecificationNotFoundException e) {
+    public ResponseEntity<Object> handleSpecificationNotFoundException(
+            SpecificationNotFoundException e
+    ) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
