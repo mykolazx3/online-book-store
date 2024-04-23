@@ -1,5 +1,6 @@
 package com.mykola.onlinebookstore.repository.book;
 
+import com.mykola.onlinebookstore.exception.SpecificationNotFoundException;
 import com.mykola.onlinebookstore.model.Book;
 import com.mykola.onlinebookstore.repository.SpecificationProvider;
 import com.mykola.onlinebookstore.repository.SpecificationProviderManager;
@@ -15,7 +16,7 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
     @Override
     public SpecificationProvider<Book> getSpecificationProvider(String key) {
         return bookSpecificationProviders.stream().filter(p -> p.getKey().equals(key)).findFirst()
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new SpecificationNotFoundException(
                         "Can't find correct specification provider for key " + key));
     }
 }
